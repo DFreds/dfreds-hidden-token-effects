@@ -7,15 +7,6 @@
                 "Choices": {
                     "Disabled": "Disabled"
                 }
-            },
-            "DispositionLevel": {
-                "Name": "Disposition Level",
-                "Hint": "If enabled, effects will be filtered by the disposition level of the token.",
-                "Choices": {
-                    "Disabled": "Disabled",
-                    "FriendlyAndNeutral": "Friendly and Neutral",
-                    "FriendlyOnly": "Friendly Only"
-                }
             }
         }
     }
