@@ -48,7 +48,10 @@ async function drawEffectsWrapper(this: Token, _wrapped: () => void) {
         if (!effect.img) continue;
 
         // Added code
-        if (!(await hiddenTokenEffects.shouldShowEffect(effect))) {
+        if (
+            !(await hiddenTokenEffects.shouldShowEffect(effect)) &&
+            effect !== overlayEffect
+        ) {
             continue;
         }
 
