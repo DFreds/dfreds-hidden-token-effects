@@ -2,25 +2,51 @@ import { MODULE_ID } from "./constants.ts";
 
 class Settings {
     // Settings keys
-    #SAMPLE = "sample";
+    #PERMISSION_LEVEL = "permissionLevel";
+    #DISPOSITION_LEVEL = "dispositionLevel";
 
     register(): void {
-        game.settings.register(MODULE_ID, this.#SAMPLE, {
-            name: "ModuleTemplate.Settings.SampleSetting.Name",
-            hint: "ModuleTemplate.Settings.SampleSetting.Hint",
+        game.settings.register(MODULE_ID, this.#PERMISSION_LEVEL, {
+            name: "HiddenTokenEffects.Settings.PermissionLevel.Name",
+            hint: "HiddenTokenEffects.Settings.PermissionLevel.Hint",
             scope: "world",
             config: true,
-            default: true,
-            type: Boolean,
+            default: "OWNER",
+            type: String,
+            choices: {
+                DISABLED:
+                    "HiddenTokenEffects.Settings.PermissionLevel.Choices.Disabled",
+                NONE: "OWNERSHIP.NONE",
+                LIMITED: "OWNERSHIP.LIMITED",
+                OBSERVER: "OWNERSHIP.OBSERVER",
+                OWNER: "OWNERSHIP.OWNER",
+            },
+        });
+
+        game.settings.register(MODULE_ID, this.#DISPOSITION_LEVEL, {
+            name: "HiddenTokenEffects.Settings.DispositionLevel.Name",
+            hint: "HiddenTokenEffects.Settings.DispositionLevel.Hint",
+            scope: "world",
+            config: true,
+            default: "DISABLED",
+            type: String,
+            choices: {
+                DISABLED:
+                    "HiddenTokenEffects.Settings.DispositionLevel.Choices.Disabled",
+                FRIENDLY_AND_NEUTRAL:
+                    "HiddenTokenEffects.Settings.DispositionLevel.Choices.FriendlyAndNeutral",
+                FRIENDLY_ONLY:
+                    "HiddenTokenEffects.Settings.DispositionLevel.Choices.FriendlyOnly",
+            },
         });
     }
 
-    get sample(): boolean {
-        return game.settings.get(MODULE_ID, this.#SAMPLE) as boolean;
+    get permissionLevel(): string {
+        return game.settings.get(MODULE_ID, this.#PERMISSION_LEVEL) as string;
     }
 
-    async setSample(value: boolean): Promise<unknown> {
-        return game.settings.set(MODULE_ID, this.#SAMPLE, value);
+    get dispositionLevel(): string {
+        return game.settings.get(MODULE_ID, this.#DISPOSITION_LEVEL) as string;
     }
 }
 
