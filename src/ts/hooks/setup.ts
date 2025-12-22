@@ -2,8 +2,7 @@ import type Token from "@client/canvas/placeables/token.d.mts";
 import { libWrapper } from "@static/lib/shim.ts";
 import { MODULE_ID } from "../constants.ts";
 import { Listener } from "./index.ts";
-import { Settings } from "../settings.ts";
-import { DocumentOwnershipLevel } from "@common/constants.mjs";
+import { HiddenTokenEffects } from "../hidden-token-effects.ts";
 
 const Setup: Listener = {
     listen(): void {
@@ -70,38 +69,6 @@ async function drawEffectsWrapper(this: Token, _wrapped: () => void) {
     this.effects.sortChildren();
     this.effects.renderable = true;
     this.renderFlags.set({ refreshEffects: true });
-}
-
-class HiddenTokenEffects {
-    #settings: Settings;
-
-    constructor() {
-        this.#settings = new Settings();
-    }
-
-    async shouldShowEffect(effect: ActiveEffect<any>): Promise<boolean> {
-        if (game.user.isGM) return true;
-
-        const isOriginOwner = await this.#isOriginOwner(effect);
-        const isPermissionAllowed = this.#isPermissionAllowed(effect);
-        return isOriginOwner || isPermissionAllowed;
-    }
-
-    async #isOriginOwner(effect: ActiveEffect<any>): Promise<boolean> {
-        if (!effect.origin) return false;
-
-        const originDocument = await fromUuid(effect.origin);
-        return originDocument?.isOwner ?? false;
-    }
-
-    #isPermissionAllowed(effect: ActiveEffect<any>): boolean {
-        const permissionLevel = this.#settings.permissionLevel;
-
-        return effect.testUserPermission(
-            game.user,
-            permissionLevel as unknown as DocumentOwnershipLevel,
-        );
-    }
 }
 
 export { Setup };
