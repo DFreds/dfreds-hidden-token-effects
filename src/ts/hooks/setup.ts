@@ -40,7 +40,7 @@ async function drawEffectsWrapper(this: Token, _wrapped: () => void) {
         (e) => e.img && e.getFlag("core", "overlay"),
     );
 
-    const hiddenTokenEffects = new HiddenTokenEffects(this);
+    const hiddenTokenEffects = new HiddenTokenEffects();
 
     // Draw effects
     const promises = [];
@@ -51,19 +51,6 @@ async function drawEffectsWrapper(this: Token, _wrapped: () => void) {
         if (!(await hiddenTokenEffects.shouldShowEffect(effect))) {
             continue;
         }
-        // setting for friendly tokens should show
-        // CONST.TOKEN_DISPOSITIONS
-        /**
-       * {
-    "SECRET": -2,
-    "HOSTILE": -1,
-    "NEUTRAL": 0,
-    "FRIENDLY": 1
-}
-       */
-        // otherwise, check ownership
-        // also check origin ownership
-        // otherwise, check setting for allowed levels
 
         const promise =
             effect === overlayEffect
@@ -83,11 +70,9 @@ async function drawEffectsWrapper(this: Token, _wrapped: () => void) {
 }
 
 class HiddenTokenEffects {
-    #token: Token;
     #settings: Settings;
 
-    constructor(token: Token) {
-        this.#token = token;
+    constructor() {
         this.#settings = new Settings();
     }
 
@@ -95,12 +80,8 @@ class HiddenTokenEffects {
         if (game.user.isGM) return true;
 
         const isOriginOwner = await this.#isOriginOwner(effect);
-        const isTokenDispositionAllowed = this.#isTokenDispositionAllowed();
         const isPermissionAllowed = this.#isPermissionAllowed(effect);
-
-        return (
-            isOriginOwner || isTokenDispositionAllowed || isPermissionAllowed
-        );
+        return isOriginOwner || isPermissionAllowed;
     }
 
     async #isOriginOwner(effect: ActiveEffect<any>): Promise<boolean> {
@@ -117,30 +98,6 @@ class HiddenTokenEffects {
             game.user,
             permissionLevel as unknown as DocumentOwnershipLevel,
         );
-    }
-
-    #isTokenDispositionAllowed(): boolean {
-        const tokenDocument = this.#token.document;
-        const disposition = tokenDocument.disposition;
-        const dispositionLevel = this.#settings.dispositionLevel;
-
-        if (dispositionLevel === "DISABLED") return false;
-
-        if (
-            dispositionLevel === "FRIENDLY_ONLY" &&
-            disposition === CONST.TOKEN_DISPOSITIONS.FRIENDLY
-        ) {
-            return true;
-        }
-        if (
-            dispositionLevel === "FRIENDLY_AND_NEUTRAL" &&
-            (disposition === CONST.TOKEN_DISPOSITIONS.FRIENDLY ||
-                disposition === CONST.TOKEN_DISPOSITIONS.NEUTRAL)
-        ) {
-            return true;
-        }
-
-        return false;
     }
 }
 
