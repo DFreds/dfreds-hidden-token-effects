@@ -25,6 +25,7 @@ class HiddenTokenEffects {
 
     #isPermissionAllowed(effect: ActiveEffect<any>): boolean {
         const permissionLevel = this.#settings.permissionLevel;
+        if (permissionLevel === "DISABLED") return true;
 
         return effect.testUserPermission(
             game.user,
