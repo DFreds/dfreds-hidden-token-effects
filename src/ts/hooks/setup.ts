@@ -17,6 +17,13 @@ const Setup: Listener = {
                 drawEffectsWrapper,
                 "OVERRIDE",
             );
+
+            libWrapper.register(
+                MODULE_ID,
+                "ActiveEffect.prototype._displayScrollingStatus",
+                displayScrollingStatusWrapper,
+                "MIXED",
+            );
         });
     },
 };
@@ -69,6 +76,19 @@ async function drawEffectsWrapper(this: Token, _wrapped: () => void) {
     this.effects.sortChildren();
     this.effects.renderable = true;
     this.renderFlags.set({ refreshEffects: true });
+}
+
+async function displayScrollingStatusWrapper(
+    this: ActiveEffect<any>,
+    wrapped: (enabled: boolean) => void,
+    enabled: boolean,
+) {
+    const hiddenTokenEffects = new HiddenTokenEffects();
+
+    if (await hiddenTokenEffects.shouldShowEffect(this)) {
+        wrapped(enabled)
+        return;
+    }
 }
 
 export { Setup };
