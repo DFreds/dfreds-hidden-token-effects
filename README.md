@@ -4,7 +4,7 @@
 <h1 align="center">DFreds Hidden Token Effects</h1>
 
 <h4 align="center">
-  <a href="https://github.com/new?template_name=dfreds-hidden-token-effects&template_owner=DFreds">Use Template</a>
+  <a href="https://foundryvtt.com/packages/dfreds-hidden-token-effects">Install</a>
   ·
   <a href="https://discord.gg/Wq8AEV9bWb">Discord</a>
   ·
@@ -18,6 +18,10 @@
     <br/>
     <br/>
     <img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FDFreds%2Fdfreds-hidden-token-effects%2Freleases%2Flatest%2Fdownload%2Fmodule.json&query=%24.compatibility.verified&style=for-the-badge&logo=foundryvirtualtabletop&label=Foundry%20Version&color=%23fe6a1f"/>
+    <a href="https://forge-vtt.com/bazaar#package=dfreds-hidden-token-effects"><img src="https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https://forge-vtt.com/api/bazaar/package/dfreds-hidden-token-effects&colorB=68a74f&style=for-the-badge&logo=condaforge"/></a>
+    <br/>
+    <img src="https://img.shields.io/github/downloads/DFreds/dfreds-hidden-token-effects/latest/dfreds-hidden-token-effects.zip?color=2b82fc&label=LATEST%20DOWNLOADS&style=for-the-badge">
+    <img src="https://img.shields.io/github/downloads/DFreds/dfreds-hidden-token-effects/total?color=2b82fc&label=TOTAL%20DOWNLOADS&style=for-the-badge">
     <br/>
     <br/>
     <a href="https://www.patreon.com/dfreds"><img src="https://img.shields.io/badge/-Patreon-%23f96854?style=for-the-badge&logo=patreon"/></a>
@@ -28,21 +32,17 @@
 </p>
 
 <p align="center">
-    <b>DFreds Hidden Token Effects</b> is a FoundryVTT module template that uses Typescript and Vite for development.
+    <b>DFreds Hidden Token Effects</b> is a FoundryVTT module that hides effect icons on tokens.
 </p>
 
 ## Features
 
-- Full use of well-defined types provided by [pf2e](https://foundryvtt.com/packages/pf2e)
-- Symlink integration, so you aren't directly messing with the foundry data folder
-- Use of [nvm](https://github.com/nvm-sh/nvm) and npm for node and package management
-- Use of [vite](https://vite.dev/) for building
-- Commands to build for production, staging, or development
-- Commands to configure and run different versions of FoundryVTT
-- Tools to automatically rename the name of the module, update the types, and enforce code linting
-- Powerful GitHub actions that handle releases, (optionally) posting updates to
-a Discord channel, and optionally publishing the release to Foundry
+- Automatically hides any effect icons that do originate from an actor or item
+the user owns
+- Easily configure when icons appear based on the level of
+ownership (limited, observer, owner)
+- Overlay icons always appear
 
 ## Getting Started
 
-### See the [documentation](https://www.dfreds-modules.com/developers/module-template-ts/) page for details.
+### See the [documentation](https://www.dfreds-modules.com/free-modules/hidden-token-effects) page for details.
