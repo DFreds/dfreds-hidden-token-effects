@@ -20,6 +20,12 @@ export const WEBSITE_API_URL: "https://api.foundryvtt.com";
 /** An ASCII greeting displayed to the client */
 export const ASCII: string;
 
+export const ACTIVE_EFFECT_SHOW_ICON: Readonly<{
+    ALWAYS: 0;
+    CONDITIONAL: 1;
+    NEVER: 2;
+}>;
+
 /**
  * Define the allowed ActiveEffect application modes.
  * Other arbitrary mode numbers can be used by systems and modules to identify special behaviors and are ignored

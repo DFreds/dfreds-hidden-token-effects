@@ -403,7 +403,7 @@ export default class Token<TDocument extends TokenDocument = TokenDocument> exte
     protected _drawEffect(src: string, tint: ColorSource | null): Promise<PIXI.Sprite | void>;
 
     /** Draw the overlay effect icon */
-    protected _drawOverlay(src: string, tint: number | null): Promise<PIXI.Sprite>;
+    protected _drawOverlay(src: string, tint: ColorSource | number | null): Promise<PIXI.Sprite>;
 
     /** Refresh the display of status effects, adjusting their position for the token width and height. */
     protected _refreshEffects(): void;

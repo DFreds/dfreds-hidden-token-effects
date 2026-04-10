@@ -75,6 +75,8 @@ export default class ActiveEffect<
      */
     get active(): boolean;
 
+    get showIcon(): number;
+
     /**
      * Does this Active Effect currently modify an Actor?
      */
