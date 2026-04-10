@@ -29,7 +29,7 @@ class Settings {
     }
 
     get permissionLevel(): string {
-        return game.settings.get(MODULE_ID, this.#PERMISSION_LEVEL) as string;
+        return game.settings.get(MODULE_ID, this.#PERMISSION_LEVEL) as unknown as string;
     }
 }
 
