@@ -28,11 +28,11 @@ const Setup: Listener = {
     },
 };
 
-async function drawEffectsWrapper(this: Token, _wrapped: () => void) {
+async function drawEffectsWrapper(this: Token) {
     this.effects.renderable = false;
 
     // Clear Effects Container
-    this.effects.removeChildren().forEach((c) => c.destroy());
+    this.effects.removeChildren().forEach(c => c.destroy());
     // @ts-ignore
     this.effects.bg = this.effects.addChild(new PIXI.Graphics());
     // @ts-ignore
@@ -41,19 +41,16 @@ async function drawEffectsWrapper(this: Token, _wrapped: () => void) {
     this.effects.overlay = null;
 
     // Categorize effects
-    const activeEffects = this.actor?.temporaryEffects || [];
-    const overlayEffect = activeEffects.findLast(
-        (e) => e.img && e.getFlag("core", "overlay"),
-    );
-
-    const hiddenTokenEffects = new HiddenTokenEffects();
+    const SHOW_ICON = CONST.ACTIVE_EFFECT_SHOW_ICON;
+    const activeEffects = this.actor?.appliedEffects.filter(e => ((e.showIcon === SHOW_ICON.ALWAYS)
+        || ((e.showIcon === SHOW_ICON.CONDITIONAL) && e.isTemporary))) ?? [];
+    const overlayEffect = activeEffects.findLast(e => e.flags.core?.overlay);
 
     // Draw effects
     const promises = [];
     for (const [i, effect] of activeEffects.entries()) {
-        if (!effect.img) continue;
-
-        // Added code
+        /* Added Code Start */
+        const hiddenTokenEffects = new HiddenTokenEffects();
         if (
             !(await hiddenTokenEffects.shouldShowEffect(effect)) &&
             effect !== overlayEffect
@@ -61,15 +58,15 @@ async function drawEffectsWrapper(this: Token, _wrapped: () => void) {
             continue;
         }
 
-        const promise =
-            effect === overlayEffect
-                ? this._drawOverlay(effect.img, effect.tint)
-                : this._drawEffect(effect.img, effect.tint);
-        promises.push(
-            promise.then((e) => {
-                if (e) e.zIndex = i;
-            }),
-        );
+        if (!effect.img) continue;
+        /* Added Code End */
+
+        const promise = effect === overlayEffect
+            ? this._drawOverlay(effect.img, effect.tint)
+            : this._drawEffect(effect.img, effect.tint);
+        promises.push(promise.then(e => {
+            if (e) e.zIndex = i;
+        }));
     }
     await Promise.allSettled(promises);
 
