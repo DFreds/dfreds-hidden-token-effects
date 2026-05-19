@@ -75,8 +75,6 @@ export default class ActiveEffect<
      */
     get active(): boolean;
 
-    get showIcon(): number;
-
     /**
      * Does this Active Effect currently modify an Actor?
      */
@@ -214,6 +212,7 @@ export default class ActiveEffect<
     protected _displayScrollingStatus(enabled: boolean): void;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default interface ActiveEffect<TParent extends Actor | Item | null = Actor | Item | null> {
     readonly _source: ActiveEffectSource;
     duration: PreparedEffectDurationData;
