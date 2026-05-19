@@ -40,19 +40,25 @@ async function drawEffectsWrapper(this: Token) {
     this.effects.renderable = false;
 
     // Clear Effects Container
-    this.effects.removeChildren().forEach(c => c.destroy());
-    // @ts-ignore
+    this.effects.removeChildren().forEach((c) => c.destroy());
+    // @ts-expect-error this is defined
     this.effects.bg = this.effects.addChild(new PIXI.Graphics());
-    // @ts-ignore
+    // @ts-expect-error this is defined
     this.effects.bg.zIndex = -1;
-    // @ts-ignore
+    // @ts-expect-error this is defined
     this.effects.overlay = null;
 
     // Categorize effects
     const SHOW_ICON = CONST.ACTIVE_EFFECT_SHOW_ICON;
-    const activeEffects = this.actor?.appliedEffects.filter(e => ((e.showIcon === SHOW_ICON.ALWAYS)
-        || ((e.showIcon === SHOW_ICON.CONDITIONAL) && e.isTemporary))) ?? [];
-    const overlayEffect = activeEffects.findLast(e => e.flags.core?.overlay);
+    const activeEffects =
+        this.actor?.appliedEffects.filter(
+            (e) =>
+                e.showIcon === SHOW_ICON.ALWAYS ||
+                (e.showIcon === SHOW_ICON.CONDITIONAL && e.isTemporary),
+        ) ?? [];
+    const overlayEffect = activeEffects.findLast(
+        (e: any) => e.flags.core?.overlay,
+    );
 
     // Draw effects
     const promises = [];
@@ -69,12 +75,15 @@ async function drawEffectsWrapper(this: Token) {
         if (!effect.img) continue;
         /* Added Code End */
 
-        const promise = effect === overlayEffect
-            ? this._drawOverlay(effect.img, effect.tint)
-            : this._drawEffect(effect.img, effect.tint);
-        promises.push(promise.then(e => {
-            if (e) e.zIndex = i;
-        }));
+        const promise =
+            effect === overlayEffect
+                ? this._drawOverlay(effect.img, effect.tint)
+                : this._drawEffect(effect.img, effect.tint);
+        promises.push(
+            promise.then((e) => {
+                if (e) e.zIndex = i;
+            }),
+        );
     }
     await Promise.allSettled(promises);
 
@@ -91,7 +100,7 @@ async function displayScrollingStatusWrapper(
     const hiddenTokenEffects = new HiddenTokenEffects();
 
     if (await hiddenTokenEffects.shouldShowEffect(this)) {
-        wrapped(enabled)
+        wrapped(enabled);
         return;
     }
 }
@@ -102,42 +111,58 @@ async function prepareTurnContextWrapper(
     combatant: Combatant,
     index: number,
 ) {
-    const { id, name, isOwner, isDefeated, hidden, initiative, permission } = combatant;
-    const resource = permission >= CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER ? combatant.resource : null;
-    const hasDecimals = Number.isFinite(initiative) && !Number.isInteger(initiative);
+    const { id, name, isOwner, isDefeated, hidden, initiative, permission } =
+        combatant;
+    const resource =
+        permission >= CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER
+            ? combatant.resource
+            : null;
+    const hasDecimals =
+        Number.isFinite(initiative) && !Number.isInteger(initiative);
     const turn = {
-        hasDecimals, hidden, id, isDefeated, initiative, isOwner, name, resource,
+        hasDecimals,
+        hidden,
+        id,
+        isDefeated,
+        initiative,
+        isOwner,
+        name,
+        resource,
         active: index === combat.turn,
-        canPing: (combatant.sceneId === canvas.scene?.id) && game.user.hasPermission("PING_CANVAS"),
-        img: await this._getCombatantThumbnail(combatant)
+        canPing:
+            combatant.sceneId === canvas.scene?.id &&
+            game.user.hasPermission("PING_CANVAS"),
+        img: await this._getCombatantThumbnail(combatant),
     };
-    // @ts-ignore
+    // @ts-expect-error this is fine to define
     turn.css = [
         turn.active ? "active" : null,
         hidden ? "hide" : null,
-        isDefeated ? "defeated" : null
+        isDefeated ? "defeated" : null,
     ].filterJoin(" ");
     const effects = [];
     const SHOW_ICON = CONST.ACTIVE_EFFECT_SHOW_ICON;
     for (const effect of combatant.actor?.appliedEffects ?? []) {
         const hiddenTokenEffects = new HiddenTokenEffects();
 
-        if (effect.statuses.has(CONFIG.specialStatusEffects.DEFEATED)) turn.isDefeated = true;
-        /* Added Code Start */
-        else if (!(await hiddenTokenEffects.shouldShowEffect(effect))) {
-            continue;
-        }
-        /* Added Code End */
-        else if ((effect.showIcon === SHOW_ICON.ALWAYS)
-            || ((effect.showIcon === SHOW_ICON.CONDITIONAL) && effect.isTemporary)) {
+        if (effect.statuses.has(CONFIG.specialStatusEffects.DEFEATED)) {
+            turn.isDefeated = true;
+        } else if (!(await hiddenTokenEffects.shouldShowEffect(effect))) {
+            /* Added Code Start */
+            // no-op - just do nothing here
+        } else if (
+            /* Added Code End */
+            effect.showIcon === SHOW_ICON.ALWAYS ||
+            (effect.showIcon === SHOW_ICON.CONDITIONAL && effect.isTemporary)
+        ) {
             effects.push({ img: effect.img, name: effect.name });
         }
     }
-    // @ts-ignore
+    // @ts-expect-error From foundry
     turn.effects = {
         icons: effects,
-        // @ts-ignore
-        tooltip: this._formatEffectsTooltip(effects)
+        // @ts-expect-error From foundry
+        tooltip: this._formatEffectsTooltip(effects),
     };
     return turn;
 }
