@@ -14,7 +14,7 @@ const Setup: Listener = {
 
             libWrapper.register(
                 MODULE_ID,
-                "Token.prototype._drawEffects",
+                "foundry.canvas.placeables.Token.prototype._drawEffects",
                 drawEffectsWrapper,
                 "OVERRIDE",
             );
@@ -28,7 +28,7 @@ const Setup: Listener = {
 
             libWrapper.register(
                 MODULE_ID,
-                "CombatTracker.prototype._prepareTurnContext",
+                "foundry.applications.sidebar.tabs.CombatTracker.prototype._prepareTurnContext",
                 prepareTurnContextWrapper,
                 "OVERRIDE",
             );
