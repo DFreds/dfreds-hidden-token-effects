@@ -27,10 +27,7 @@ class HiddenTokenEffects {
         const permissionLevel = this.#settings.permissionLevel;
         if (permissionLevel === "DISABLED") return true;
 
-        return effect.testUserPermission(
-            game.user,
-            permissionLevel as unknown as DocumentOwnershipLevel,
-        );
+        return effect.testUserPermission(game.user, permissionLevel as unknown as DocumentOwnershipLevel);
     }
 }
 

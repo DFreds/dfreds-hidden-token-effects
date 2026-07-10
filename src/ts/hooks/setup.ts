@@ -52,23 +52,16 @@ async function drawEffectsWrapper(this: Token) {
     const SHOW_ICON = CONST.ACTIVE_EFFECT_SHOW_ICON;
     const activeEffects =
         this.actor?.appliedEffects.filter(
-            (e) =>
-                e.showIcon === SHOW_ICON.ALWAYS ||
-                (e.showIcon === SHOW_ICON.CONDITIONAL && e.isTemporary),
+            (e) => e.showIcon === SHOW_ICON.ALWAYS || (e.showIcon === SHOW_ICON.CONDITIONAL && e.isTemporary),
         ) ?? [];
-    const overlayEffect = activeEffects.findLast(
-        (e: any) => e.flags.core?.overlay,
-    );
+    const overlayEffect = activeEffects.findLast((e: any) => e.flags.core?.overlay);
 
     // Draw effects
     const promises = [];
     for (const [i, effect] of activeEffects.entries()) {
         /* Added Code Start */
         const hiddenTokenEffects = new HiddenTokenEffects();
-        if (
-            !(await hiddenTokenEffects.shouldShowEffect(effect)) &&
-            effect !== overlayEffect
-        ) {
+        if (!(await hiddenTokenEffects.shouldShowEffect(effect)) && effect !== overlayEffect) {
             continue;
         }
 
@@ -105,20 +98,10 @@ async function displayScrollingStatusWrapper(
     }
 }
 
-async function prepareTurnContextWrapper(
-    this: CombatTracker,
-    combat: Combat,
-    combatant: Combatant,
-    index: number,
-) {
-    const { id, name, isOwner, isDefeated, hidden, initiative, permission } =
-        combatant;
-    const resource =
-        permission >= CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER
-            ? combatant.resource
-            : null;
-    const hasDecimals =
-        Number.isFinite(initiative) && !Number.isInteger(initiative);
+async function prepareTurnContextWrapper(this: CombatTracker, combat: Combat, combatant: Combatant, index: number) {
+    const { id, name, isOwner, isDefeated, hidden, initiative, permission } = combatant;
+    const resource = permission >= CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER ? combatant.resource : null;
+    const hasDecimals = Number.isFinite(initiative) && !Number.isInteger(initiative);
     const turn = {
         hasDecimals,
         hidden,
@@ -129,17 +112,11 @@ async function prepareTurnContextWrapper(
         name,
         resource,
         active: index === combat.turn,
-        canPing:
-            combatant.sceneId === canvas.scene?.id &&
-            game.user.hasPermission("PING_CANVAS"),
+        canPing: combatant.sceneId === canvas.scene?.id && game.user.hasPermission("PING_CANVAS"),
         img: await this._getCombatantThumbnail(combatant),
     };
     // @ts-expect-error this is fine to define
-    turn.css = [
-        turn.active ? "active" : null,
-        hidden ? "hide" : null,
-        isDefeated ? "defeated" : null,
-    ].filterJoin(" ");
+    turn.css = [turn.active ? "active" : null, hidden ? "hide" : null, isDefeated ? "defeated" : null].filterJoin(" ");
     const effects = [];
     const SHOW_ICON = CONST.ACTIVE_EFFECT_SHOW_ICON;
     for (const effect of combatant.actor?.appliedEffects ?? []) {

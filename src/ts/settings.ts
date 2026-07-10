@@ -13,8 +13,7 @@ class Settings {
             default: "OWNER",
             type: String,
             choices: {
-                DISABLED:
-                    "HiddenTokenEffects.Settings.PermissionLevel.Choices.Disabled",
+                DISABLED: "HiddenTokenEffects.Settings.PermissionLevel.Choices.Disabled",
                 NONE: "OWNERSHIP.NONE",
                 LIMITED: "OWNERSHIP.LIMITED",
                 OBSERVER: "OWNERSHIP.OBSERVER",
@@ -24,7 +23,7 @@ class Settings {
                 for (const token of canvas.tokens.placeables) {
                     token.drawEffects();
                 }
-            }
+            },
         });
     }
 
