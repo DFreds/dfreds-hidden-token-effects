@@ -2,12 +2,6 @@ import { DocumentOwnershipLevel } from "@common/constants.mjs";
 import { Settings } from "./settings.ts";
 
 class HiddenTokenEffects {
-    #settings: Settings;
-
-    constructor() {
-        this.#settings = new Settings();
-    }
-
     async shouldShowEffect(effect: ActiveEffect<any>): Promise<boolean> {
         if (game.user.isGM) return true;
 
@@ -24,7 +18,8 @@ class HiddenTokenEffects {
     }
 
     #isPermissionAllowed(effect: ActiveEffect<any>): boolean {
-        const permissionLevel = this.#settings.permissionLevel;
+        const settings = new Settings();
+        const permissionLevel = settings.permissionLevel;
         if (permissionLevel === "DISABLED") return true;
 
         return effect.testUserPermission(game.user, permissionLevel as unknown as DocumentOwnershipLevel);
