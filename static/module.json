@@ -10,7 +10,6 @@
     },
     "esmodules": ["dfreds-hidden-token-effects.mjs"],
     "scripts": [],
-    "styles": ["styles/dfreds-hidden-token-effects.css"],
     "packs": [],
     "packFolders": [],
     "relationships": {
