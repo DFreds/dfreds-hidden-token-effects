@@ -124,13 +124,11 @@ async function prepareTurnContextWrapper(this: CombatTracker, combat: Combat, co
 
         if (effect.statuses.has(CONFIG.specialStatusEffects.DEFEATED)) {
             turn.isDefeated = true;
-        } else if (!(await hiddenTokenEffects.shouldShowEffect(effect))) {
-            /* Added Code Start */
-            // no-op - just do nothing here
         } else if (
+            /* Added Code Start */
+            (await hiddenTokenEffects.shouldShowEffect(effect)) &&
             /* Added Code End */
-            effect.showIcon === SHOW_ICON.ALWAYS ||
-            (effect.showIcon === SHOW_ICON.CONDITIONAL && effect.isTemporary)
+            (effect.showIcon === SHOW_ICON.ALWAYS || (effect.showIcon === SHOW_ICON.CONDITIONAL && effect.isTemporary))
         ) {
             effects.push({ img: effect.img, name: effect.name });
         }
