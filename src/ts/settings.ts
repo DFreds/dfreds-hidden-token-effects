@@ -19,7 +19,7 @@ class Settings {
                 OBSERVER: "OWNERSHIP.OBSERVER",
                 OWNER: "OWNERSHIP.OWNER",
             },
-            onChange: (_value: string) => {
+            onChange: () => {
                 for (const token of canvas.tokens.placeables) {
                     token.drawEffects();
                 }
