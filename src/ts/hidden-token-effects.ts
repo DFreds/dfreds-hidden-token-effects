@@ -2,19 +2,19 @@ import { DocumentOwnershipLevel } from "@common/constants.mjs";
 import { Settings } from "./settings.ts";
 
 class HiddenTokenEffects {
-    async shouldShowEffect(effect: ActiveEffect<any>): Promise<boolean> {
+    shouldShowEffect(effect: ActiveEffect<any>): boolean {
         if (game.user.isGM) return true;
 
-        const isOriginOwner = await this.#isOriginOwner(effect);
+        const isOriginOwner = this.#isOriginOwner(effect);
         const isPermissionAllowed = this.#isPermissionAllowed(effect);
         return isOriginOwner || isPermissionAllowed;
     }
 
-    async #isOriginOwner(effect: ActiveEffect<any>): Promise<boolean> {
+    #isOriginOwner(effect: ActiveEffect<any>): boolean {
         if (!effect.origin) return false;
 
-        const originDocument = await fromUuid(effect.origin);
-        return originDocument?.isOwner ?? false;
+        const origin = fromUuidSync(effect.origin, { strict: false });
+        return origin instanceof foundry.abstract.Document && origin.isOwner;
     }
 
     #isPermissionAllowed(effect: ActiveEffect<any>): boolean {

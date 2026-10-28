@@ -61,7 +61,7 @@ async function drawEffectsWrapper(this: Token) {
     for (const [i, effect] of activeEffects.entries()) {
         /* Added Code Start */
         const hiddenTokenEffects = new HiddenTokenEffects();
-        if (!(await hiddenTokenEffects.shouldShowEffect(effect)) && effect !== overlayEffect) {
+        if (!hiddenTokenEffects.shouldShowEffect(effect) && effect !== overlayEffect) {
             continue;
         }
 
@@ -85,14 +85,10 @@ async function drawEffectsWrapper(this: Token) {
     this.renderFlags.set({ refreshEffects: true });
 }
 
-async function displayScrollingStatusWrapper(
-    this: ActiveEffect<any>,
-    wrapped: (enabled: boolean) => void,
-    enabled: boolean,
-) {
+function displayScrollingStatusWrapper(this: ActiveEffect<any>, wrapped: (enabled: boolean) => void, enabled: boolean) {
     const hiddenTokenEffects = new HiddenTokenEffects();
 
-    if (await hiddenTokenEffects.shouldShowEffect(this)) {
+    if (hiddenTokenEffects.shouldShowEffect(this)) {
         wrapped(enabled);
         return;
     }
@@ -126,7 +122,7 @@ async function prepareTurnContextWrapper(this: CombatTracker, combat: Combat, co
             turn.isDefeated = true;
         } else if (
             /* Added Code Start */
-            (await hiddenTokenEffects.shouldShowEffect(effect)) &&
+            hiddenTokenEffects.shouldShowEffect(effect) &&
             /* Added Code End */
             (effect.showIcon === SHOW_ICON.ALWAYS || (effect.showIcon === SHOW_ICON.CONDITIONAL && effect.isTemporary))
         ) {
