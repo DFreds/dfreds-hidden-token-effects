@@ -37,7 +37,7 @@
 
 ## Features
 
-- Automatically hides any effect icons that do originate from an actor or item
+- Automatically hides any effect icons that do not originate from an actor or item
 the user owns
 - Easily configure when icons appear based on the level of
 ownership (limited, observer, owner)
