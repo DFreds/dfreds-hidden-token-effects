@@ -115,16 +115,20 @@ async function prepareTurnContextWrapper(this: CombatTracker, combat: Combat, co
     turn.css = [turn.active ? "active" : null, hidden ? "hide" : null, isDefeated ? "defeated" : null].filterJoin(" ");
     const effects = [];
     const SHOW_ICON = CONST.ACTIVE_EFFECT_SHOW_ICON;
-    for (const effect of combatant.actor?.appliedEffects ?? []) {
+    const appliedEffects = combatant.actor?.appliedEffects ?? [];
+    const isIconShown = (effect: ActiveEffect<any>) =>
+        effect.showIcon === SHOW_ICON.ALWAYS || (effect.showIcon === SHOW_ICON.CONDITIONAL && effect.isTemporary);
+    const overlayEffect = appliedEffects.findLast((effect: any) => isIconShown(effect) && effect.flags.core?.overlay);
+    for (const effect of appliedEffects) {
         const hiddenTokenEffects = new HiddenTokenEffects();
 
         if (effect.statuses.has(CONFIG.specialStatusEffects.DEFEATED)) {
             turn.isDefeated = true;
         } else if (
             /* Added Code Start */
-            hiddenTokenEffects.shouldShowEffect(effect) &&
+            (hiddenTokenEffects.shouldShowEffect(effect) || effect === overlayEffect) &&
             /* Added Code End */
-            (effect.showIcon === SHOW_ICON.ALWAYS || (effect.showIcon === SHOW_ICON.CONDITIONAL && effect.isTemporary))
+            isIconShown(effect)
         ) {
             effects.push({ img: effect.img, name: effect.name });
         }
