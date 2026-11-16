@@ -1,4 +1,5 @@
 import { MODULE_ID } from "./constants.ts";
+import { redrawEffects } from "./redraw-effects.ts";
 
 class Settings {
     // Settings keys
@@ -19,11 +20,7 @@ class Settings {
                 OBSERVER: "OWNERSHIP.OBSERVER",
                 OWNER: "OWNERSHIP.OWNER",
             },
-            onChange: () => {
-                for (const token of canvas.tokens.placeables) {
-                    token.drawEffects();
-                }
-            },
+            onChange: redrawEffects,
         });
     }
 
