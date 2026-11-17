@@ -41,11 +41,8 @@ async function drawEffectsWrapper(this: Token) {
 
     // Clear Effects Container
     this.effects.removeChildren().forEach((c) => c.destroy());
-    // @ts-expect-error this is defined
     this.effects.bg = this.effects.addChild(new PIXI.Graphics());
-    // @ts-expect-error this is defined
     this.effects.bg.zIndex = -1;
-    // @ts-expect-error this is defined
     this.effects.overlay = null;
 
     // Categorize effects
@@ -136,7 +133,6 @@ async function prepareTurnContextWrapper(this: CombatTracker, combat: Combat, co
     // @ts-expect-error From foundry
     turn.effects = {
         icons: effects,
-        // @ts-expect-error From foundry
         tooltip: this._formatEffectsTooltip(effects),
     };
     return turn;
